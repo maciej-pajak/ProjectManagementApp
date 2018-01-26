@@ -4,10 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
@@ -15,7 +18,8 @@ public class User {
     private Long id;
     
     @NotBlank
-    private String login; // TODO unique
+    @Email
+    private String email; // TODO unique
     
     @NotBlank
     private String name;
@@ -34,12 +38,12 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getName() {

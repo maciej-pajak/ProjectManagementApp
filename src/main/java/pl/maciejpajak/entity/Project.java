@@ -7,12 +7,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
+@Table(name = "projects")
 public class Project {
     
     @Id
@@ -34,7 +39,13 @@ public class Project {
     @NotBlank
     private String identifier;
     
+    @ManyToOne
+    private User owner;
+    
     @ManyToMany
+    @JoinTable( name = "projects_users", 
+                joinColumns = @JoinColumn(name = "project_id"),
+                inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> users;
     
     private boolean active;
@@ -103,4 +114,12 @@ public class Project {
         this.active = active;
     }
 
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+    
 }
