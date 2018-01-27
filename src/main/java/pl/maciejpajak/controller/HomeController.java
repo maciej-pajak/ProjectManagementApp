@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import pl.maciejpajak.repository.ProjectRepository;
+import pl.maciejpajak.repository.StatusRepository;
 import pl.maciejpajak.repository.UserRepository;
 
 @Controller
@@ -15,11 +16,11 @@ public class HomeController {
     private UserRepository userRepo;
     
     @Autowired
-    private ProjectRepository projectRepo;
+    private StatusRepository projectRepo;
 
     @RequestMapping("/")
     public String home() {
         return "home";
     }
-    
+       
 }

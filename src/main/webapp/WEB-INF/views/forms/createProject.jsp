@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Users</label>
-                                <form:select itemValue="id" itemLabel="name" path="users.id" items="${users}"/>
+                                <form:select path="users" items="${users}" multiple="true" itemLabel="email" itemValue="id"/>
                             </div>
                             <div>
                                 <button type="submit" class="btn btn-success">Create</button>

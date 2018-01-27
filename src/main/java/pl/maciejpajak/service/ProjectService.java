@@ -29,7 +29,7 @@ public class ProjectService implements IProjectService {
         p.setDescription(dto.getDescription());
         p.setIdentifier(generateIdentifier(dto.getName()));
         p.setOwner(userRepo.findOne(ownerId));  // TODO handle null pointer exception
-//        p.setUsers();
+        p.setUsers(dto.getUsers());
         p.setUrl(dto.getUrl());
         p.setCreated(LocalDateTime.now());
         p.setActive(true);
