@@ -60,7 +60,8 @@ public class PersistenceConfig {
 //        );
         
         jpaProperties.put("javax.persistence.schema-generation.database.action", env.getRequiredProperty("schema-generation.database.action"));
- 
+        jpaProperties.put("javax.persistence.sql-load-script-source", env.getRequiredProperty("javax.persistence.sql-load-script-source"));
+        
         //Configures the naming strategy that is used when Hibernate creates
         //new database objects and schema elements
 //        jpaProperties.put("hibernate.ejb.naming_strategy", 
@@ -88,5 +89,14 @@ public class PersistenceConfig {
     public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
+    
+//    @Bean
+//    public PlatformTransactionManager transactionManager(){
+//        JpaTransactionManager transactionManager
+//          = new JpaTransactionManager();
+//        transactionManager.setEntityManagerFactory(
+//          entityManagerFactoryBean().getObject() );
+//        return transactionManager;
+//     }
     
 }

@@ -31,7 +31,7 @@ public class RegisterController {
             
             if (!service.exists(user)) {
                 service.registerNewUser(user);
-                return "";
+                return "redirect:/login";   // TODO
             }
             result.rejectValue("email", "registration.email", "this email is already taken");   // TODO move to file
         }

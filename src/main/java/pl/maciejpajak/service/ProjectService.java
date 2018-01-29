@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import pl.maciejpajak.dto.ProjectDto;
 import pl.maciejpajak.entity.Project;
+import pl.maciejpajak.entity.Task;
 import pl.maciejpajak.entity.User;
 import pl.maciejpajak.repository.ProjectRepository;
+import pl.maciejpajak.repository.TaskRepository;
 import pl.maciejpajak.repository.UserRepository;
 
 @Service
@@ -22,6 +24,9 @@ public class ProjectService implements IProjectService {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private TaskRepository taskRepo;
+    
     @Override
     public Project createProject(ProjectDto dto, Long ownerId) {
         Project p = new Project();
@@ -45,6 +50,31 @@ public class ProjectService implements IProjectService {
     @Override
     public List<User> getAvailableUsers() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public List<Project> getProjectsByOwnerId(Long id) {
+        return projectRepo.findByOwnerId(id);
+    }
+
+    @Override
+    public List<Project> getProjectsByUsersId(Long id) {
+        return projectRepo.findByUsersId(id);
+    }
+    
+    @Override
+    public Project getProjectById(Long id) {
+        return projectRepo.findOne(id);
+    }
+    
+    @Override
+    public Project getProjectByIdFetchUsers(Long id) {
+        return projectRepo.findOneByIdFetchUsers(id);
+    }
+
+    @Override
+    public List<Task> getTasksByProjectId(Long id) {
+        return taskRepo.findByProjectId(id);
     }
 
 }

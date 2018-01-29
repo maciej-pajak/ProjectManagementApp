@@ -66,14 +66,5 @@ public class AdminController {
     public String processStatusCreationRequest(@Valid Project project) {
         return "redirect:/admin/status";
     }
-//    
-//    Listy projektów. 
-//    Dodawania projektu. 
-//    Listy użytkowników. 
-//    Dodawania użytkownika. 
-//    Listy statusów. 
-//    Dodawania statusu. 
-//    Listy priorytetów. 
-//    Dodawania priorytetu.
     
 }

@@ -1,5 +1,6 @@
 <%@ tag description="Page Wrapper Tag" pageEncoding="UTF-8" %>
 <%@ attribute name="title" required="true" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Twitterish - ${title}</title>
+    <title>Project Management - ${title}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -55,14 +56,24 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href='<c:url value="/"/>'><i class="fa fa-twitter-square fa-fw"></i> New project</a>
+                            <a href='<c:url value="/project/create"/>'><i class="fa fa-plus fa-fw"></i> New project</a>
                         </li>
                         <li>
                             <a href='<c:url value="/user/outbox"/>'><i class="fa fa-send fa-fw"></i> Your projects</a>
                         </li>
+                        <c:forEach var="p" items="${createdProjects}">
+                            <li>
+                                <a href='<c:url value="/project/${p.id}"/>'><i class="fa fa-minus fa-fw"></i> ${p.name}</a>
+                            </li>
+                        </c:forEach>
                         <li>
                             <a href='<c:url value="/user/outbox"/>'><i class="fa fa-send fa-fw"></i> Projects you participate in</a>
                         </li>
+                        <c:forEach var="p" items="${participateProjects}">
+                            <li>
+                                <a href='<c:url value="/project/${p.id}"/>'><i class="fa fa-minus fa-fw"></i> ${p.name}</a>
+                            </li>
+                        </c:forEach>
                         <li>
                             <a href='<c:url value="/user/${loggedUser.id}"/>'><i class="fa fa-twitter fa-fw"></i> Notifications</a>
                         </li>
