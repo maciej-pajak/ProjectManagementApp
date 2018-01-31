@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import pl.maciejpajak.dto.UserDto;
-import pl.maciejpajak.service.IUserService;
+import pl.maciejpajak.service.UserService;
 
 @Controller
 public class RegisterController {
     
     @Autowired
-    private IUserService service;
+    private UserService service;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {

@@ -18,19 +18,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pl.maciejpajak.entity.Project;
-import pl.maciejpajak.service.IProjectService;
+import pl.maciejpajak.service.ProjectService;
+import pl.maciejpajak.service.TaskService;
+import pl.maciejpajak.service.UserService;
 
 @Controller
 @RequestMapping("/project")
 public class ProjectController {
     
     @Autowired
-    private IProjectService service;
+    private ProjectService projectService;
+    
+    @Autowired
+    private UserService userService;
+    
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("project", new Project());
-        model.addAttribute("users", service.getAvailableUsers());
+        model.addAttribute("users", userService.findAll());
         return "project/createProject";
     }
     
@@ -40,7 +48,7 @@ public class ProjectController {
             
             return "project/createProject";
         }
-        service.createProject(project, 1L);
+        projectService.createProject(project, 1L);
 //        service.createProject(project, 1L); // TODO change id
         return "redirect:/";
     }
@@ -51,8 +59,8 @@ public class ProjectController {
             @PageableDefault(size = 5, sort = "priority", direction = Sort.Direction.DESC) 
             @Qualifier("tasks")
             Pageable pageableTasks) {
-        model.addAttribute("project", service.getProjectByIdFetchUsers(id)); // TODO check for null
-        model.addAttribute("tasks", service.getTasksByProjectId(id, pageableTasks));
+        model.addAttribute("project", projectService.getProjectByIdFetchUsers(id)); // TODO check for null
+        model.addAttribute("tasks", taskService.getTasksByProjectId(id, pageableTasks));
         return "project/showDetails";
     }
     
@@ -64,7 +72,7 @@ public class ProjectController {
     @PostMapping("/{id}/close")
     public String closeProject(@PathVariable Long id, @RequestParam boolean close) {
         if (close) {
-            service.closeProject(id);
+            projectService.closeProject(id);
         }
         return "redirect:/";
     }

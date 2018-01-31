@@ -50,7 +50,7 @@
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Your projects<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" aria-expanded="false" style="">
                                 <li th:each="createdProject: ${createdProjects}">
-                                    <a th:href="@{/project/{id}(id=${createdProject.id})}" > <span th:text="${createdProject.name}"></span></a>
+                                    <a th:href="@{/project/{id}(id=${createdProject.key})}" > <span th:text="${createdProject.value}"></span></a>
                                 </li>
                             </ul>
                         </li>
