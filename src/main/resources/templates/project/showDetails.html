@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="layout/main">
+<body>
+    <section layout:fragment="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:text="${project.name}">Project name</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Description: </th><td th:text="${project.description}">Description</td>
+                    </tr>
+                    <tr>
+                        <th>Created: </th><td th:text="${project.name}">Name</td>
+                    </tr>
+                    <tr>
+                        <th>Website: </th><td th:text="${project.url}">Website</td>
+                    </tr>
+                    <tr>
+                        <th>Identifier: </th><td th:text="${project.identifier}">Identifier</td>
+                    </tr>
+                    <tr>
+                        <th>Owner: </th><td th:text="${project.owner.email}">Email</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>Actions</b>
+                    </div>
+                    <div class="panel-body">
+                        <a th:href="@{/project/{id}/task/create(id=${project.id})}" type="button" class="btn btn-success">Create new task</a>
+                        <a th:href="@{/project/{id}/edit(id=${project.id})}" type="button" class="btn btn-primary">Edit project details</a>
+                        <a th:href="@{/project/{id}/users/edit(id=${project.id})}" type="button" class="btn btn-primary">Edit users</a>
+                        <a th:href="@{/project/{id}/close(id=${project.id})}" type="button" class="btn btn-warning">Close project</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                     <div class="panel-heading">
+                         <b>Users</b>
+                     </div>
+                     <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Email</th>
+                                        
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user: ${project.users}">
+                                        <td th:text="${user.name}">Name</td>
+                                        <td th:text="${user.surname}">Surname</td>
+                                        <td th:text="${user.email}">email</td>
+                                        
+                                        <td>
+                                            <a th:href="@{''}">Remove from this project</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Tasks
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Topic</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                        <th>User</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="task: ${tasks}">
+                                        <td th:text="${task.topic}">Topic</td>
+                                        <td th:text="${task.description}">Description</td>
+                                        <td th:text="${task.status.name}">Status</td>
+                                        <td th:text="${task.priority.name}">Priority</td>
+                                        <td th:text="${task.user.email}">Email</td>
+                                        <td th:text="'action'">Action</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pager">
+                                <li th:if="${tasks.hasPrevious()}">
+                                    <a th:href="@{''(tasks_page=${tasks.previousPageable().pageNumber + 1})}">Show newer tweets</a>
+                                </li>
+                                <li th:if="${tasks.hasNext()}">
+                                    <a th:href="@{''(tasks_page=${tasks.nextPageable().pageNumber + 1})}">Show older tweets</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

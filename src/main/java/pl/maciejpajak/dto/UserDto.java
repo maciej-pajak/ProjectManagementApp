@@ -21,6 +21,7 @@ public class UserDto {
     @NotBlank
     private String password;
     
+    @NotBlank
     private String passwordRepetition;
 
     public String getEmail() {

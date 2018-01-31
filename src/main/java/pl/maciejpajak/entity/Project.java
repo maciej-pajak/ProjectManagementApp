@@ -3,6 +3,7 @@ package pl.maciejpajak.entity;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -30,13 +30,13 @@ public class Project {
     @NotBlank
     private String description;
     
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime created;
     
     @NotBlank
     private String url;
     
-    @NotBlank
+    @Column(nullable = false)
     private String identifier;
     
     @ManyToOne
@@ -48,6 +48,7 @@ public class Project {
                 inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Collection<User> users;
     
+    @Column(nullable = false)
     private boolean active;
 
     public Long getId() {

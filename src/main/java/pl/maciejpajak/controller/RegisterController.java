@@ -22,7 +22,7 @@ public class RegisterController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("user", new UserDto());
-        return "forms/register";
+        return "register";
     }
     
     @PostMapping("/register")
@@ -37,6 +37,6 @@ public class RegisterController {
         }
         user.setPassword("");
         user.setPasswordRepetition("");
-        return "forms/register";
+        return "register";
     }
 }

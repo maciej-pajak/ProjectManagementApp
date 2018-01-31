@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="layout/main">
+<body>
+<section layout:fragment="content">
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">New project</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="#" th:action="@{/project/create}" method="post" th:object="${project}">
+                    <div class="form-group">
+                        <label for="name"> Name: </label>
+                        <input type="text" required="required"
+                            th:field="*{name}" class="form-control" id="name" />
+                        <!-- <form:errors path="name" element="div" /> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="description"> Description: </label>
+                        <input type="text" required="required"
+                            th:field="*{description}" class="form-control"
+                            id="description" />
+                        <!-- <form:errors path="description" element="div" /> -->
+                    </div>
+                    <div class="form-group">
+                        <label for="url"> Website: </label>
+                        <input type="text" required="required"
+                            th:field="*{url}" class="form-control" id="url" />
+                        <!-- <div th:if="${#fields.hasErrors('datePlanted')}" th:errors="*{datePlanted}">Incorrect date</p> -->
+                        <!-- <form:errors path="url" element="div" /> -->
+                    </div>
+                    <div class="form-group">
+                        <label>Users:</label>
+                        <select th:field="*{users}" class="form-control" multiple="true">
+                        <option th:each="user : ${users}" 
+                            th:value="${user.id}" 
+                            th:text="${user.email}">user</option>
+                        </select>
+                        <!-- <select th:field="${users}" items="${users}"
+                            multiple="true" itemLabel="email"
+                            itemValue="id" class="form-control" /> -->
+                    </div>
+                    <ul th:if="${#fields.hasErrors('*')}">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                    </ul>
+                    <div>
+                        <button type="submit" class="btn btn-success">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+</body>
+</html>

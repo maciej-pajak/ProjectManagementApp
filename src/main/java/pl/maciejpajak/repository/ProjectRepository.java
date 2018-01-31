@@ -13,8 +13,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p LEFT JOIN FETCH p.users WHERE p.id=:id")
     public Project findOneByIdFetchUsers(@Param("id") Long id);
     
-    public List<Project> findByOwnerId(Long id);
+    public List<Project> findByOwnerIdAndActive(Long id, boolean isActive);
     
-    public List<Project> findByUsersId(Long id);
+    public List<Project> findByUsersIdAndActive(Long id, boolean isActive);
     
 }

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import pl.maciejpajak.entity.Project;
 
@@ -15,8 +16,9 @@ import pl.maciejpajak.entity.Project;
 public class AdminController {
 
     @RequestMapping("/panel")
+    @ResponseBody
     public String showAdminPanel() {
-        return "admin/panel";
+        return "Welcome to admin panel";
     }
     
     // ------------------ projects management ------------------

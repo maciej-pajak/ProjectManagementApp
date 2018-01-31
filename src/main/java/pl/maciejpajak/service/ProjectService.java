@@ -1,13 +1,16 @@
 package pl.maciejpajak.service;
 
+import java.security.Principal;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import pl.maciejpajak.dto.ProjectDto;
 import pl.maciejpajak.entity.Project;
 import pl.maciejpajak.entity.Task;
 import pl.maciejpajak.entity.User;
@@ -27,20 +30,6 @@ public class ProjectService implements IProjectService {
     @Autowired
     private TaskRepository taskRepo;
     
-    @Override
-    public Project createProject(ProjectDto dto, Long ownerId) {
-        Project p = new Project();
-        p.setName(dto.getName());
-        p.setDescription(dto.getDescription());
-        p.setIdentifier(generateIdentifier(dto.getName()));
-        p.setOwner(userRepo.findOne(ownerId));  // TODO handle null pointer exception
-        p.setUsers(dto.getUsers());
-        p.setUrl(dto.getUrl());
-        p.setCreated(LocalDateTime.now());
-        p.setActive(true);
-        return projectRepo.save(p);
-    }
-    
     private String generateIdentifier(String str) {
         String normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
         String accentsRemoved = normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
@@ -54,12 +43,12 @@ public class ProjectService implements IProjectService {
 
     @Override
     public List<Project> getProjectsByOwnerId(Long id) {
-        return projectRepo.findByOwnerId(id);
+        return projectRepo.findByOwnerIdAndActive(id, true);
     }
 
     @Override
     public List<Project> getProjectsByUsersId(Long id) {
-        return projectRepo.findByUsersId(id);
+        return projectRepo.findByUsersIdAndActive(id, true);
     }
     
     @Override
@@ -73,8 +62,28 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public List<Task> getTasksByProjectId(Long id) {
-        return taskRepo.findByProjectId(id);
+    public Page<Task> getTasksByProjectId(Long id, Pageable pageable) {
+        return taskRepo.findByProjectId(id, pageable);
+    }
+
+    @Override
+    public Project createProject(Project project, Long id) {
+//        org.springframework.security.core.userdetails.User p = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        project.setOwner(userRepo.getOne(id));
+        project.setActive(true);
+        project.setCreated(LocalDateTime.now());
+        project.setIdentifier(generateIdentifier(project.getName()));
+        return projectRepo.save(project);
+    }
+
+    @Override
+    public boolean closeProject(Long id) {
+        Project p = projectRepo.findOne(id);
+        if (p != null) {
+            p.setActive(false);
+            projectRepo.save(p);
+        }
+        return true;
     }
 
 }

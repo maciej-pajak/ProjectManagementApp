@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="layout/main">
+<body>
+    <section layout:fragment="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"> Task details </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table">
+                    <tr>
+                        <th>Topic </th>
+                        <td th:text="${task.topic}"></td>
+                    </tr>
+                    <tr>
+                        <th>Description </th>
+                        <td th:text="${task.description}"></td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td th:text="${task.status.name}"></td>
+                    </tr>
+                    <tr>
+                        <th>Priority</th>
+                        <td th:text="${task.priority.name}"></td>
+                    </tr>
+                    <tr>
+                        <th>User</th>
+                        <td th:text="${task.user.email}"></td>
+                    </tr>
+                </table>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Update status
+                    </div>
+                    <div class="panel-body">
+                         <form method="post">
+                            <div class="form-group">
+                                <label>Status:</label>
+                                <select class="form-control" name="status">
+                                    <option th:each="s : ${status}" 
+                                        th:value="${s.id}" 
+                                        th:text="${s.name}">status</option>
+                                </select>
+                            </div>
+                            <input class="btn btn-success" type="submit" th:href="@{/task}" value="Update"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

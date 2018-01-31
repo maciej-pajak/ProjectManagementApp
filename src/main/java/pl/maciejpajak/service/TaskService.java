@@ -3,9 +3,10 @@ package pl.maciejpajak.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import pl.maciejpajak.dto.TaskDto;
 import pl.maciejpajak.entity.Priority;
 import pl.maciejpajak.entity.Project;
 import pl.maciejpajak.entity.Status;
@@ -32,15 +33,15 @@ public class TaskService implements ITaskService {
     private ProjectRepository projectRepo;
     
     @Override
-    public Task createTask(TaskDto dto) {
-        Task t = new Task();
-        t.setTopic(dto.getTopic());
-        t.setDescription(dto.getDescription());
-        t.setPriority(dto.getPriority());
-        t.setProject(dto.getProject());
-        t.setStatus(dto.getStatus());
-        t.setUser(dto.getUser());
-        return taskRepo.save(t);
+    public Task createTask(Task task) {
+//        Task t = new Task();
+//        t.setTopic(dto.getTopic());
+//        t.setDescription(dto.getDescription());
+//        t.setPriority(dto.getPriority());
+//        t.setProject(dto.getProject());
+//        t.setStatus(dto.getStatus());
+//        t.setUser(dto.getUser());
+        return taskRepo.save(task);
     }
 
     @Override
@@ -62,6 +63,23 @@ public class TaskService implements ITaskService {
     @Override
     public Project getProjectById(Long id) {
         return projectRepo.findOneByIdFetchUsers(id);
+    }
+
+    @Override
+    public Page<Task> getTasksByUserId(Long id, Pageable pageable) {
+        return taskRepo.findByUserId(id, pageable);
+    }
+
+    @Override
+    public Task getTaskbyId(Long id) {
+        return taskRepo.findOne(id);
+    }
+
+    @Override
+    public Task updateTaskStatus(Long id, Long statusId) {
+        Task t = taskRepo.getOne(id);
+        t.setStatus(statusRepo.findOne(statusId));;
+        return taskRepo.save(t);
     }
 
 }

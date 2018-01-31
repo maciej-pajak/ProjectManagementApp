@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="layout/main">
+<body>
+    <section layout:fragment="content">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"> Your tasks </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Topic</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>User</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="task: ${tasks}">
+                            <td th:text="${task.topic}">Topic</td>
+                            <td th:text="${task.description}">Description</td>
+                            <td th:text="${task.status.name}">Status</td>
+                            <td th:text="${task.priority.name}">Priority</td>
+                            <td th:text="${task.user.email}">Email</td>
+                            <td>
+                                <a th:href="@{/task/{id}(id=${task.id})}">Show</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="pager">
+                    <li th:if="${tasks.hasPrevious()}">
+                        <a th:href="@{''(page=${tasks.previousPageable().pageNumber + 1})}">Previous page</a>
+                    </li>
+                    <li th:if="${tasks.hasNext()}">
+                        <a th:href="@{''(page=${tasks.nextPageable().pageNumber + 1})}">Next page</a>
+                    </li>
+                </ul>  
+            </div>
+        </div>
+    </section>
+</body>
+</html>
