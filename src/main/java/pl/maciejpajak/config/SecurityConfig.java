@@ -12,8 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import pl.maciejpajak.service.UserDetailServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -29,15 +32,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
     
+    @Bean
+    public UserDetailsService customUserDetailsService() { 
+        return new UserDetailServiceImpl();
+    }
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
         auth.
-            jdbcAuthentication()
-                .usersByUsernameQuery(usersQuery)
-                .authoritiesByUsernameQuery(rolesQuery)
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder());
+            userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder());
+//            jdbcAuthentication()
+//                .usersByUsernameQuery(usersQuery)
+//                .authoritiesByUsernameQuery(rolesQuery)
+//                .dataSource(dataSource)
+//                .passwordEncoder(passwordEncoder());
     }
     
     @Override
@@ -45,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         
         http.
             authorizeRequests()
-                .antMatchers("/").permitAll()
+//                .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")

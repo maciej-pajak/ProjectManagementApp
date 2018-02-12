@@ -1,4 +1,4 @@
-package pl.maciejpajak.entity.converter;
+package pl.maciejpajak.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;

@@ -28,10 +28,9 @@ public class RegisterController {
     @PostMapping("/register")
     public String processRegistrationRequest(@Valid @ModelAttribute("user") UserDto user, BindingResult result) {
         if (!result.hasErrors()) {
-            
             if (!service.exists(user)) {
                 service.registerNewUser(user);
-                return "redirect:/login";   // TODO
+                return "redirect:/login";
             }
             result.rejectValue("email", "registration.email", "this email is already taken");   // TODO move to file
         }

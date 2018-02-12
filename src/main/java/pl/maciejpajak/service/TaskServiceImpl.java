@@ -28,29 +28,30 @@ public class TaskServiceImpl implements TaskService {
     
     @Override
     public Task createTask(Task task) {
+        task.setActive(true);
         return taskRepo.save(task);
     }
 
     @Override
     public Page<Task> getTasksByUserId(Long id, Pageable pageable) {
-        return taskRepo.findByUserId(id, pageable);
+        return taskRepo.findByUserIdAndActive(id, pageable, true);
     }
 
     @Override
     public Task getTaskbyId(Long id) {
-        return taskRepo.findOne(id);
+        return taskRepo.findOneByIdAndActive(id, true);
     }
 
     @Override
     public Task updateTaskStatus(Long id, Long statusId) {
-        Task t = taskRepo.getOne(id);
+        Task t = taskRepo.findOneByIdAndActive(id, true);
         t.setStatus(statusRepo.findOne(statusId));
         return taskRepo.save(t);
     }
 
     @Override
     public Page<Task> getTasksByProjectId(Long id, Pageable pageable) {
-        return taskRepo.findByProjectId(id, pageable);
+        return taskRepo.findByProjectIdAndActive(id, pageable, true);
     }
 
     @Override

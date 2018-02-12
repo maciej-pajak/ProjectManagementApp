@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import pl.maciejpajak.entity.Project;
 import pl.maciejpajak.service.ProjectService;
+import pl.maciejpajak.util.CurrentUser;
 
 @ControllerAdvice(basePackageClasses = {ProjectController.class, RegisterController.class, TaskController.class, HomeController.class})
 public class LoggedUserControllerAdvice {
@@ -17,15 +20,15 @@ public class LoggedUserControllerAdvice {
     private ProjectService service;
     
     @ModelAttribute("createdProjects")
-//    public List<Project> createdProjects() {
-    public Map<Long, String> createdProjects() {
-//        return service.getProjectsByOwnerId(1L); // TODO change id to currently logged in user
-        return service.findActiveNamesAndIdsByOwnerAndActive(542L);
+    public Map<Long, String> createdProjects(@AuthenticationPrincipal CurrentUser user) {
+        System.out.println(user.getUsername());
+        return service.findActiveNamesAndIdsByOwnerAndActive(user.getId());
     }
     
     @ModelAttribute("participateProjects")
-    public List<Project> participateProjects() {
-        return service.getProjectsByUsersId(1L); // TODO as above
+    public List<Project> participateProjects(@AuthenticationPrincipal CurrentUser user) {
+        System.out.println(user.getUsername());
+        return service.getProjectsByUsersId(user.getId());
     }
     
 }

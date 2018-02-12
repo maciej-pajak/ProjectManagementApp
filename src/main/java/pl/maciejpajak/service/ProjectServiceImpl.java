@@ -2,7 +2,6 @@ package pl.maciejpajak.service;
 
 import java.text.Normalizer;
 import java.time.LocalDateTime;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,10 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pl.maciejpajak.entity.Pair;
 import pl.maciejpajak.entity.Project;
+import pl.maciejpajak.entity.Task;
 import pl.maciejpajak.repository.ProjectRepository;
+import pl.maciejpajak.repository.TaskRepository;
 import pl.maciejpajak.repository.UserRepository;
+import pl.maciejpajak.util.BaseEntityNotFoundException;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -24,6 +25,9 @@ public class ProjectServiceImpl implements ProjectService {
     
     @Autowired
     private UserRepository userRepo;
+    
+    @Autowired
+    private TaskRepository taskRepo;
     
     private String generateIdentifier(String str) {
         String normalized = Normalizer.normalize(str, Normalizer.Form.NFD);
@@ -48,7 +52,7 @@ public class ProjectServiceImpl implements ProjectService {
     
     @Override
     public Project getProjectByIdFetchUsers(Long id) {
-        return projectRepo.findOneByIdFetchUsers(id);
+        return projectRepo.findOneByIdAndActiveFetchUsers(id).orElseThrow(() -> new BaseEntityNotFoundException(id));
     }
 
     @Override
@@ -62,27 +66,27 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean closeProject(Long id) {
+    public Project closeProject(Long id) {
         Project p = projectRepo.findOne(id);
         if (p != null) {
             p.setActive(false);
-            projectRepo.save(p);
+            List<Task> tasks = taskRepo.findAllByProjectId(id);
+            tasks.forEach(t -> t.setActive(false));
+            taskRepo.save(tasks);
+            return projectRepo.save(p);
         }
-        return true;
+        return null;
     }
 
     @Override
     public Map<Long, String> findActiveNamesAndIdsByOwnerAndActive(Long id) {
-//        List<Object[]> list = projectRepo.findActiveNamesAndIdsByOwnerAndActive(email);
-//        Map<Long, String> test = new HashMap<>();
-//        for (Object[] o : list) {
-//            test.put((Long) o[0], (String) o[1]);
-//        }
-//        new Pair<>(fda, fs);
         List<Entry<Long, String>> list = projectRepo.findActiveNamesAndIdsByOwnerAndActive(id);
-        Map<Long, String> test = list.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-        test.forEach((k,v) -> System.out.println("@@@@@@@@@@@@@" + k + "   " + v));
-        return test;
+        return list.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    @Override
+    public String findProjectIdentifier(Long id) {
+        return projectRepo.findProjectIdentifier(id);
     }
 
 }

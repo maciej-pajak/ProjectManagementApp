@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group">
                         <label>Users:</label>
-                        <select th:field="*{users}" class="form-control" multiple="true">
+                        <select th:field="*{users}" class="form-control" multiple="multiple" size="10">
                         <option th:each="user : ${users}" 
                             th:value="${user.id}" 
                             th:text="${user.email}">user</option>

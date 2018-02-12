@@ -1,4 +1,4 @@
-package pl.maciejpajak.entity;
+package pl.maciejpajak.util;
 
 import java.util.Map.Entry;
 

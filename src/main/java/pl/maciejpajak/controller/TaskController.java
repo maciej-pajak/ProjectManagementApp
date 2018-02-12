@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import pl.maciejpajak.entity.Project;
 import pl.maciejpajak.entity.Task;
 import pl.maciejpajak.service.ProjectService;
 import pl.maciejpajak.service.TaskService;
+import pl.maciejpajak.util.CurrentUser;
 
 @Controller
 public class TaskController {
@@ -30,32 +33,43 @@ public class TaskController {
     private ProjectService projectService;
 
     @GetMapping("/project/{id}/task/create")
-    @PreAuthorize("projectService.getProjectById(id).owner.id==1")
+    @PreAuthorize("@securityService.isProjectOwner(#id)") // TODO or is admin
     public String showCreateTaskForm(@PathVariable Long id, Model model) {
-        Task task = new Task();
-        task.setProject(projectService.getProjectById(id));  // TODO null pointer
-        model.addAttribute("taskDto", task);
-        model.addAttribute("status", taskService.getStatusList());
-        model.addAttribute("priorities", taskService.getPrioritiesList());
+        
+        taskFormAddModelAttributes(model, id);
+        model.addAttribute("task", new Task());
+        
         return "task/createTask";
     }
     
     @PostMapping("/project/{id}/task/create")
-    public String processTaskCreationRequest(@Valid Task task, BindingResult result, Model model) {
+    @PreAuthorize("@securityService.isProjectOwner(#id)")
+    public String processTaskCreationRequest(@Valid Task task, BindingResult result,
+                                            @PathVariable Long id, Model model) {
         if (result.hasErrors()) {
-            // TODO refactor this --- project null
-            model.addAttribute("status", taskService.getStatusList());
-            model.addAttribute("priorities", taskService.getPrioritiesList());
+            taskFormAddModelAttributes(model, id);
             return "task/createTask";
         }
+        Project p = new Project();
+        p.setId(id);
+        task.setProject(p);
         taskService.createTask(task);
-        return "redirect:/project/" + task.getProject().getId();
+        return "redirect:/project/" + id;
+    }
+    
+    private void taskFormAddModelAttributes(Model model, Long projectId) {
+        Project p = projectService.getProjectByIdFetchUsers(projectId);
+        model.addAttribute("project", p);
+        model.addAttribute("status", taskService.getStatusList());
+        model.addAttribute("priorities", taskService.getPrioritiesList());
     }
     
     @RequestMapping("/tasks")
     public String showUsersTasks(@PageableDefault(size = 5, sort = "priority", direction = Sort.Direction.DESC) Pageable pageable,
-            Model model) {
-        model.addAttribute("tasks", taskService.getTasksByUserId(1L, pageable)); // TODO change id to current user
+            Model model,
+            Authentication authentication) {
+        Long id = ((CurrentUser) authentication.getPrincipal()).getId();
+        model.addAttribute("tasks", taskService.getTasksByUserId(id, pageable));
         return "task/showUserTasks";
     }
     
@@ -67,6 +81,7 @@ public class TaskController {
     }
     
     @PostMapping("/task/{id}")
+//    @PreAuthorize("@securityService.isProjectOwner(#id)")
     public String processUpdateStatusRequest(@PathVariable Long id, @RequestParam Long status) {
         taskService.updateTaskStatus(id, status);
         return "redirect:/tasks";

@@ -1,0 +1,14 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Error</title>
+</head>
+<body>
+    <h1>Error</h1>
+    <p th:text="${url}"></p>
+    <p th:text="${exception}"></p>
+    <p th:text="${errorMessage}"></p>
+    <a th:href="@{/}">Home page</a>
+    <a th:href="@{/login}">Login page</a>
+</body>
+</html>

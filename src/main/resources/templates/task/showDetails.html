@@ -36,7 +36,7 @@
                         Update status
                     </div>
                     <div class="panel-body">
-                         <form method="post">
+                         <form method="post" th:action="@{/task/{id}(id=${task.id})}">
                             <div class="form-group">
                                 <label>Status:</label>
                                 <select class="form-control" name="status">
@@ -45,7 +45,7 @@
                                         th:text="${s.name}">status</option>
                                 </select>
                             </div>
-                            <input class="btn btn-success" type="submit" th:href="@{/task}" value="Update"/>
+                            <input class="btn btn-success" type="submit" value="Update"/>
                         </form>
                     </div>
                 </div>
