@@ -15,17 +15,6 @@ public class ErrorControllerAdvice {
 
     private static final Logger log = LoggerFactory.getLogger(ErrorControllerAdvice.class);
 
-    // @ExceptionHandler
-    // public String handleException(HttpServletRequest request,Throwable throwable,
-    // Exception exception, Model model) {
-    // model.addAttribute("exception", exception);
-    // model.addAttribute("url", request.getRequestURL() );
-    // model.addAttribute("errorMessage", exception.getMessage());
-    //// ResponseEntity<Object> fas = new ResponseEntity<>(status) // TODO
-    // return "error/general";
-    //
-    // }
-
     @ExceptionHandler({ BaseEntityNotFoundException.class })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public String handleBaseEntityNotFoundException(BaseEntityNotFoundException ex, Model model, HttpServletRequest request) {
