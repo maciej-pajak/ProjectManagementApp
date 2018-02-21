@@ -21,22 +21,7 @@ public class LoggingAspect {
     
     @Autowired
     private ActivityRepository repo;
-    
-//    @Pointcut("execution(* pl.maciejpajak.service..create*(..))")
-//    public void createObjects() {
-//        
-//    }
-//    
-//    @Pointcut("execution(* pl.maciejpajak.service..update*(..))")
-//    public void updateObjects() {
-//        
-//    }
-//    
-//    @Pointcut("execution(* pl.maciejpajak.service..close*(..))")
-//    public void closeObjects() {
-//        
-//    }
-//
+
     @AfterReturning(pointcut = "execution(* pl.maciejpajak.service..create*(..)) "
             + "|| execution(* pl.maciejpajak.service..update*(..)) "
             + "|| execution(* pl.maciejpajak.service..close*(..))",
