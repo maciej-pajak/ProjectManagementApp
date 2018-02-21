@@ -3,7 +3,6 @@ package pl.maciejpajak.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -27,7 +26,6 @@ import pl.maciejpajak.service.ProjectService;
 import pl.maciejpajak.service.TaskService;
 import pl.maciejpajak.service.UserService;
 import pl.maciejpajak.util.CurrentUser;
-import pl.maciejpajak.util.message.Message;
 import pl.maciejpajak.util.message.MessageHelper;
 
 @Controller
@@ -69,8 +67,6 @@ public class ProjectController {
 //            @Qualifier("tasks")
             Pageable pageableTasks,
             @AuthenticationPrincipal CurrentUser user) {
-        System.out.println(user.getUsername() + "<=======================@@@@");
-        System.out.println(user.getUser() + "<=======================@@@@");
         Project p = projectService.getProjectByIdFetchUsers(id);
         if (!p.getOwner()
                 .equals(user.getUser()) && 
