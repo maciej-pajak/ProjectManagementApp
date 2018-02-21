@@ -2,15 +2,19 @@ package pl.maciejpajak.util;
 
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
 import pl.maciejpajak.entity.User;
 
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
+    
+    private static final Logger log = LoggerFactory.getLogger(CurrentUser.class);
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-    
+
     private User user;
     
     public CurrentUser(String username, String password, boolean enabled, boolean accountNonExpired,
@@ -19,7 +23,7 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
             User user) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.user = user;
-        System.out.println("Creating new CurrentUser");
+        log.debug("Creating new CurrentUser");
     }
 
     public User getUser() {
