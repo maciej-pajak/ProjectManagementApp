@@ -9,7 +9,7 @@ import pl.maciejpajak.util.LoggableActivity;
 import pl.maciejpajak.util.OperationType;
 
 public interface ProjectService {
-    @LoggableActivity(operationType = OperationType.CREATE) // TODO
+    @LoggableActivity(operationType = OperationType.CREATE)
     public Project createProject(Project project, Long id);
     public List<Project> getProjectsByOwnerId(Long id);
     public List<Project> getProjectsByUsersId(Long id);
