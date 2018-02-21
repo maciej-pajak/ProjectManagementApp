@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import pl.maciejpajak.dto.ActivityDto;
 import pl.maciejpajak.entity.Activity;
 import pl.maciejpajak.repository.ActivityRepository;
-import pl.maciejpajak.repository.ProjectRepository;
 
 @Service
 public class ActivityService {
@@ -18,9 +17,6 @@ public class ActivityService {
     @Autowired
     private ActivityRepository activityRepo;
     
-    @Autowired
-    private ProjectRepository projectRepo;
-
     public List<ActivityDto> getRecentActivity() {
         List<Activity> activity = activityRepo.findAll();
         return activity.stream().map(new ConvertActivityToDto()).collect(Collectors.toList());
@@ -31,7 +27,7 @@ public class ActivityService {
         @Override
         public ActivityDto apply(Activity a) {
             a.getObjectClass();
-            // TODO
+
             return new ActivityDto(a.getCreated(),
                     a.getUser().getId(),
                     a.getUser().getEmail(), 
