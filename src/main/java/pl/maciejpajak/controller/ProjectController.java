@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -62,20 +61,15 @@ public class ProjectController {
     }
     
     @RequestMapping("/{id}")
+    @PreAuthorize("@securityService.isProjectOwnerOrUser(#id)")
     public String showProjectDetails(@PathVariable Long id, Model model,
             @PageableDefault(size = 5, sort = "priority", direction = Sort.Direction.DESC) 
 //            @Qualifier("tasks")
             Pageable pageableTasks,
             @AuthenticationPrincipal CurrentUser user) {
         Project p = projectService.getProjectByIdFetchUsers(id);
-        if (!p.getOwner()
-                .equals(user.getUser()) && 
-                !p.getUsers()
-                .contains(
-                        user.getUser())) {
-            throw new AccessDeniedException("Access denied");
-        }
-        model.addAttribute("isOwner", p.getOwner().getId().equals(user.getId()));
+
+        model.addAttribute("isOwner", true);
         model.addAttribute("project", p);
         model.addAttribute("tasks", taskService.getTasksByProjectId(id, pageableTasks));
         return "project/showDetails";
