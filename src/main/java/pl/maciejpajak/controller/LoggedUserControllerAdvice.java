@@ -20,13 +20,11 @@ public class LoggedUserControllerAdvice {
     
     @ModelAttribute("createdProjects")
     public Map<Long, String> createdProjects(@AuthenticationPrincipal CurrentUser user) {
-        System.out.println(user.getUsername());
         return service.findActiveNamesAndIdsByOwnerAndActive(user.getId());
     }
     
     @ModelAttribute("participateProjects")
     public List<Project> participateProjects(@AuthenticationPrincipal CurrentUser user) {
-        System.out.println(user.getUsername());
         return service.getProjectsByUsersId(user.getId());
     }
     
